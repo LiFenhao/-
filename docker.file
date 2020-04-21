@@ -1,0 +1,22 @@
+FROM gdal_java:0.2.1
+
+##设置控制台字符集编码
+ENV LANG=zh_CN.UTF-8
+ENV LANGUAGE=zh_CN.UTF-8
+##设置docker容器的时间
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+ENV HOME /app
+#挂载app dir
+RUN mkdir ${HOME}
+
+#COPY or ADD source to Image
+ADD target/pie-catalog-service.jar ${HOME}/pie-catalog-service.jar
+#ADD application.properties ${HOME}/application.properties
+#ADD log4j.properties ${HOME}/log4j.properties
+#ADD logback.xml ${HOME}/logback.xml
+
+WORKDIR ${HOME}
+EXPOSE 8082
+ENTRYPOINT ["/opt/jdk8/bin/java","-jar","pie-catalog-service.jar","--spring.config.local=application.properties"]
