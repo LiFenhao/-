@@ -1,0 +1,141 @@
+
+##################Linux命令#####################
+#项目打包：
+ mvn clean install package -Dmaven.test.skip
+#linux启动jar包：
+   临时启动jar：java -jar 要启动的jar包
+   后台启动jar服务：nohup  java -jar 要启动的jar包> log.file 2>&1 &
+#查看进程：
+   ps -ewf|grep java/nginx
+   jps -ml
+# 关闭进程
+   kill -9  进程号
+# 查看日志：
+   tail -f  ./目录/log.file(日志文件) -n 行数
+#查看磁盘容量
+  df -h
+# tar包解压缩
+ tar -xvf  文件名.tar
+# 重启nginx服务
+service nginx restart
+######################远程debug#####################
+nohup java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5010 pie-data-storage.jar>/export/shuguantest/logs/storage.file 2>&1 &
+nohup java -jar   -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5007 pie-data-receive.jar >/export/shuguantest/logs/receive.file 2>&1 &
+nohup java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5006 pie-data-analysis.jar >/export/shuguantest/logs/analysis.file 2>&1 &
+nohup java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5008 pie-data-archive-storage.jar >/export/shuguantest/logs/archivestorage.file 2>&1 &
+nohup java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5009 pie-data-mount.jar >/export/shuguantest/mount/logs/mount.file 2>&1 &
+nohup java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5011 pie-data-index.jar >/home/shuguan/logs/index.file 2>&1 &
+nohup  java -jar pie-catalog-service.jar >/export/shuguantest/catalog.file 2>&1 &
+nohup java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5018 pie-catalog-service.jar>/export/shuguantest/logs/catalog.file 2>&1 &
+
+
+#docker命令：
+docker ps -a 
+docker logs -f “ID”  --tail 300
+curl post
+
+
+#####################gdal命令#####################
+
+#查看信息：
+gdalifo  tiff或tif文件绝对路径
+#生成拇指图：
+gdal_translate tiff或tif文件绝对路径  生成图片绝对路径  -of JPEG -ot Byte -outsize 像素宽 像素高
+
+
+
+远程连接电脑命令：mstsc
+
+防火墙：
+
+/home/shuguan/GF1_WFV2_E109.3_N41.0_20170811_L1A0002535749.tar.gz
+
+
+服务器之间拷贝数据：
+
+scp /usr/lib64/libgdalalljni.so  192.168.1.83:/usr/lib64/
+
+
+
+docker 乱码：
+LANG=zh_CN.UTF-8
+LANGUAGE=zh_CN.UTF-8
+
+
+#停止容器：
+docker  stop  容器ID
+#删除容器：
+docker rm   容器ID
+#查看镜像：
+docker images 
+#删除镜像：
+docker rmi 镜像ID
+
+进入 目录： cd 
+#构建镜像:
+docker build -t pie-data-analysis:v1.0 空格 .
+
+#启动镜像
+启动：docker run -d --name pie-data-analysis -p 8093:8080 --restart=always -v /home/mount/service/conf/pie-data-analysis-service:/analysis -v /home/workspace:/home/workspace -v /home:/home pie-data-analysis:v1.0
+#进入容器：
+docker exec -t  容器ID  bash
+
+docker exec -t  55c1cf8c9b24 bash
+
+docker start 6bb256647878 
+
+#退出容器：
+exit
+
+
+挂载命令：
+mount -t nfs 192.168.2.32:/export/share/   /export/share/
+去掉挂载：
+  umount -l   目录
+查看挂载：
+df -h
+
+
+//-----------docker 构建镜像
+// . 表示当前目录 -f 参数指定Dockerfile文件  -t 表示 制作的镜像tag  数字代表指定的版本号
+docker build -f Dockerfile  -t  openoffice4:1.1.1[镜像名称]  . 
+
+//-----------docker日志查看     
+docker logs -f pie-data-job --tail 200
+
+//查看docker进程
+docker ps 
+
+//停止容器：
+docker stop f8f45d90c067[容器id/容器名称,都行]
+
+//移除容器
+docker rm f8f45d90c067[容器id/容器名称,都行]
+
+//启动镜像 -p 映射服务与docker内的端口, -v 映射路径, --name 指定docker容器名称
+docker run -p 8082:8082 -v /export:/export --name catalog -d catalog-service:1.0[镜像名称]
+
+
+
+#获取文件夹大小的命令
+du -h  /export/H49E009003   | tail -n 1 | awk '{ print $1 }'
+
+
+
+位置;/usr/local/software/zookeeper-3.4.14/bin
+kafka启动命令:
+-daemon 指定配置文件
+kafka-server-start.sh -daemon /usr/local/software/kafka_2.12-2.3.0/config/server.properties
+
+zookeeper启动命令:
+zkServer.sh start
+
+
+
+
+
+
+
+
+
+
